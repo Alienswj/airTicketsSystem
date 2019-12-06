@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>机票预订系统</title>
+<script type="text/javascript">
+	//autologin:will send a blank request to server to check the session info
+	function autologin(){
+		//alert("ge");
+		xmlHttpRequest=new XMLHttpRequest();
+		xmlHttpRequest.onreadystatechange=callback;
+		xmlHttpRequest.open("post","login",true);
+		xmlHttpRequest.send();
+	}
+	//use ajax
+	function login(){
+		var username=document.getElementById("username").value;
+		var password=document.getElementById("password").value;
+		//console.log(username);
+		if(username==""||password=="")
+			alert("用户名或密码为空");
+		else{
+			var urlEncodedData = "";
+			var urlEncodedDataPairs = [];
+			urlEncodedDataPairs.push(encodeURIComponent('username') + '=' + encodeURIComponent(username));
+			urlEncodedDataPairs.push(encodeURIComponent('password') + '=' + encodeURIComponent(password));
+			urlEncodedData = urlEncodedDataPairs.join('&').replace(/%20/g, '+');
+			xmlHttpRequest=new XMLHttpRequest();
+			xmlHttpRequest.onreadystatechange=callback;
+			xmlHttpRequest.open("post","login",true);
+			xmlHttpRequest.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+			xmlHttpRequest.send(urlEncodedData);
+			console.log("send");
+		}
+	}
+	//who login the system? get it
+	function callback(){
+		if(xmlHttpRequest.readyState==4&&xmlHttpRequest.status==200)
+		{
+			var data=xmlHttpRequest.responseText;
+			//alert(data);
+			if(data!="")
+			{
+				if(data=="false")
+				{
+					alert("用户名或密码错误！");
+				}else{
+					document.getElementById("login").innerHTML = data;
+					document.getElementById("logoff").href="/airTicketsSystem/logoff";
+					document.getElementById("logoff").innerHTML='注销';
+				}
+			}
+		}
+	}
+</script>
+</head>
+<body onload="autologin();">
+<div id="login" >
+	用户名：<input type="text" id="username"><br/>
+	密&nbsp;&nbsp;&nbsp;码：<input type="text" id="password">
+	<button type="button" onclick="login();">登录</button>
+</div>
+<div >
+	<a href="#" id="logoff"></a>
+</div>
+<div align="right">
+	<a href="signup.html" >注册</a>
+</div>
+
+<form action="/queryTickets" method="post">
+	出发地：<input type="text" name="departure"><br/>
+	目的地：<input type="text" name="destination"><br/>
+	日期：<input type="date" name="depTime"><br/>
+	<input type="submit" name="查询" >
+</form>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>登录</title>
+<script type="text/javascript">
+	function check(){
+		var username=document.getElementById("username").value;
+		var password=document.getElementById("password").value;
+		if(username==""||password="")
+		{
+			alert("用户名或密码不能为空！");
+		}else{
+			var urlEncodedData = "";
+			var urlEncodedDataPairs = [];
+			urlEncodedDataPairs.push(encodeURIComponent('username') + '=' + encodeURIComponent(username));
+			urlEncodedDataPairs.push(encodeURIComponent('password') + '=' + encodeURIComponent(password));
+			urlEncodedData = urlEncodedDataPairs.join('&').replace(/%20/g, '+');
+			xmlHttpRequest=new XMLHttpRequest();
+			xmlHttpRequest.open("post","signup",true);
+			xmlHttpRequest.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+			xmlHttpRequest.send(urlEncodedData);
+		}
+	}
+</script>
+</head>
+<body>
+	用户名：<input type="text" id="username"><br/>
+	密码：<input type="text" name="password"><br/>
+	<input type="submit" value="注册" onclick="check();">
+</body>
+</html>

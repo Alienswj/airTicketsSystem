@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Vue 测试实例 - 菜鸟教程(runoob.com)</title>
+<script src="F:\a学习\web\Vue\vue.js"></script>
+<script src="F:\a学习\web\Vue\axios-0.19.0\lib"></script>
+</head>
+<body>
+<div id="app">
+  {{ info }}
+</div>
+	
+	<div id="sd">
+		fuck!
+	</div>
+<script type = "text/javascript">
+new Vue({
+  el: '#app',
+  data () {
+    return {
+      info: null
+    }
+  },
+  mounted () {
+    axios
+      .get('https://www.runoob.com/try/ajax/json_demo.json')
+      .then(response => (this.info = response))
+      .catch(function (error) { // 请求失败处理
+        console.log(error);
+      });
+  }
+})
+</script>
+</body>
+</html>
