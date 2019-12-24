@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>机票预订系统</title>
 <script type="text/javascript">
+
 	//autologin:will send a blank request to server to check the session info
 	function autologin(){
 		//alert("ge");
@@ -67,10 +68,10 @@
 	<a href="signup.html" >注册</a>
 </div>
 
-<form action="/queryTickets" method="post">
+<form action="queryTickets" method="post">
 	出发地：<input type="text" name="departure"><br/>
 	目的地：<input type="text" name="destination"><br/>
-	日期：<input type="date" name="depTime"><br/>
+	日期：<input type="date" name="airDate"><br/>
 	<input type="submit" name="查询" >
 </form>
 </body>

@@ -18,11 +18,43 @@
 		<url-pattern>/login</url-pattern>
 	</servlet-mapping>
 	<servlet>
+		<servlet-name>axios_login</servlet-name>
+		<servlet-class>cn.cuit.controller.axios_login</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>axios_login</servlet-name>
+		<url-pattern>/axios_login</url-pattern>
+	</servlet-mapping>
+	<servlet>
 		<servlet-name>logoffServlet</servlet-name>
 		<servlet-class>cn.cuit.controller.logoffServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>logoffServlet</servlet-name>
 		<url-pattern>/logoff</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>signupServlet</servlet-name>
+		<servlet-class>cn.cuit.service.signupServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>signupServlet</servlet-name>
+		<url-pattern>/signup</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>axios_signup</servlet-name>
+		<servlet-class>cn.cuit.service.axios_signup</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>axios_signup</servlet-name>
+		<url-pattern>/axios_signup</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>queryTicketsServlet</servlet-name>
+		<servlet-class>cn.cuit.service.queryTicketsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>queryTicketsServlet</servlet-name>
+		<url-pattern>/queryTickets</url-pattern>
 	</servlet-mapping>
 </web-app>

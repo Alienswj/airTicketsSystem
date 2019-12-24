@@ -27,7 +27,7 @@ public class loginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username=null;
 		String password=null;
-		//if(request.getContentLength()!=0) {
+		
 		HttpSession session=request.getSession();
 		PrintWriter out=response.getWriter();
 		if(session.getAttribute("isLogin")!=null&&!session.getAttribute("isLogin").equals("false"))
