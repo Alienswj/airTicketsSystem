@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <form id='signup' @submit.prevent="submitInfo">
+        用户名：<input type="text" name="username" v-model='username'>
+        <p>{{username}}</p><br />
+        密码：<input type="text" name="password" v-model='password'><br />
+        <input type="submit" value="提交">
+    </form>
+</body>
+<script type="text/javascript">
+    new Vue({
+        el: '#signup',
+        data: {
+            username: null,
+            password: null
+        },
+        methods: {
+            submitInfo(e) {
+                console.log(this.username);
+                if (!this.username || !this.password) {
+                    alert("username or password is empty!");
+                } else {
+                    axios.post('axios_signup', {
+                        username: this.username,
+                        password: this.password
+                    })
+                        .then(
+                            response => ((response.data == "success") ? alert("注册成功！") : alert("注册失败！"))
+                        )
+                        .catch(
+                            error => (console.log(error))
+                        )
+                }
+            }
+        }
+    })
+</script>
+
+</html>
