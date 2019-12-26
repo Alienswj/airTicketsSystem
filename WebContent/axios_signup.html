@@ -11,8 +11,7 @@
 <body>
     <form id='signup' @submit.prevent="submitInfo">
         用户名：<input type="text" name="username" v-model='username'>
-        <p>{{username}}</p><br />
-        密码：<input type="text" name="password" v-model='password'><br />
+        密码：<input type="password" name="password" v-model='password'>{{password}}<br />
         <input type="submit" value="提交">
     </form>
 </body>

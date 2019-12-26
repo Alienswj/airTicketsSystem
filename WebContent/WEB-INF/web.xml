@@ -10,14 +10,6 @@
 	</filter-mapping>
 	
 	<servlet>
-		<servlet-name>loginServlet</servlet-name>
-		<servlet-class>cn.cuit.controller.loginServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>loginServlet</servlet-name>
-		<url-pattern>/login</url-pattern>
-	</servlet-mapping>
-	<servlet>
 		<servlet-name>axios_login</servlet-name>
 		<servlet-class>cn.cuit.controller.axios_login</servlet-class>
 	</servlet>
@@ -34,14 +26,6 @@
 		<url-pattern>/logoff</url-pattern>
 	</servlet-mapping>
 	<servlet>
-		<servlet-name>signupServlet</servlet-name>
-		<servlet-class>cn.cuit.service.signupServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>signupServlet</servlet-name>
-		<url-pattern>/signup</url-pattern>
-	</servlet-mapping>
-	<servlet>
 		<servlet-name>axios_signup</servlet-name>
 		<servlet-class>cn.cuit.service.axios_signup</servlet-class>
 	</servlet>
@@ -56,5 +40,29 @@
 	<servlet-mapping>
 		<servlet-name>queryTicketsServlet</servlet-name>
 		<url-pattern>/queryTickets</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>bookTicketServlet</servlet-name>
+		<servlet-class>cn.cuit.service.bookTicketServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>bookTicketServlet</servlet-name>
+		<url-pattern>/bookTicket</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>refundServlet</servlet-name>
+		<servlet-class>cn.cuit.service.refundServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>refundServlet</servlet-name>
+		<url-pattern>/refundTickets</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>queryOrdersServlet</servlet-name>
+		<servlet-class>cn.cuit.service.queryOrdersServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>queryOrdersServlet</servlet-name>
+		<url-pattern>/queryOrders</url-pattern>
 	</servlet-mapping>
 </web-app>

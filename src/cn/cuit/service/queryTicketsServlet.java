@@ -1,7 +1,11 @@
 package cn.cuit.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -10,6 +14,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.fastjson.*;
 
 import cn.cuit.dao.dbCRUD;
 
@@ -28,57 +34,50 @@ public class queryTicketsServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String departure=request.getParameter("departure");
-		String destination=request.getParameter("destination");
-		String airDate=request.getParameter("airDate");
+		BufferedReader br = request.getReader();
+
+	    String str, wholeStr = "";
+	    while((str = br.readLine()) != null){
+	        wholeStr += str;
+		}
+		//System.out.println(wholeStr);
+	    JSONObject json=JSON.parseObject(wholeStr);
+	    
+		String departure=json.getString("departure");
+		String destination=json.getString("destination");
+		String airDate=json.getString("airDate");
 		dbCRUD.connDb();
 		String sql="select * from airlineinfo,tiksinfo where airlineinfo.airId=tiksinfo.airId and departure='"+departure+"' and destination='"+destination+"' and airDate='"+airDate+"'";
-		System.out.println(sql);
-		PrintWriter out=response.getWriter();
 		try {
 			ResultSet rs=dbCRUD.retrieve(sql);
-			out.println("<html>");
-	        out.println("<head>");
-	        out.println("<title>查询结果</title>");
-	        out.println("</head>");
-	        out.println("<body>");
-	        out.println("<table border=\"1\" align=\"center\">");
-	        out.println("<tr>");
-	        out.println("<th>航班号</th>");
-	        out.println("<th>航空公司</th>");
-	        out.println("<th>起飞地</th>");
-	        out.println("<th>目的地</th>");
-	        out.println("<th>起飞时间</th>");
-	        out.println("<th>降落时间</th>");
-	        out.println("<th>价格</th>");
-	        out.println("<th>日期</th>");
-	        out.println("<th>余票量</th>");
-	        out.println("<th></th>");
-	        out.println("</tr>");
-	        while(rs.next())
-	        {
-	        	out.println("<tr>");
-	        	out.println("<td align=\"center\">"+rs.getString("airId")+"</td>");
-	        	out.println("<td align=\"center\">"+rs.getString("airLine")+"</td>");
-	        	out.println("<td align=\"center\">"+rs.getString("departure")+"</td>");
-	        	out.println("<td align=\"center\">"+rs.getString("destination")+"</td>");
-	        	out.println("<td align=\"center\">"+rs.getTime("depTime")+"</td>");
-	        	out.println("<td align=\"center\">"+rs.getTime("landTime")+"</td>");
-	        	out.println("<td align=\"center\">"+rs.getInt("price")+"</td>");
-	        	out.println("<td align=\"center\">"+rs.getDate("airDate")+"</td>");
-	        	out.println("<td align=\"center\">"+rs.getInt("remainTickets")+"</td>");
-	        	out.println("<td align=\"center\">"+"</td>");
-	        	out.println("<tr>");
-	        }
+			JSONArray ticket=new JSONArray();
+			JSONObject tickets=new JSONObject();
+			while(rs.next())
+			{
+				JSONObject info=new JSONObject();
+				info.put("airId",rs.getString("airId"));
+				info.put("airLine",rs.getString("airLine"));
+				info.put("departure",rs.getString("departure"));
+				info.put("destination",rs.getString("destination"));
+				info.put("depTime",rs.getTime("depTime"));
+				info.put("landTime",rs.getTime("landTime"));
+				info.put("price",rs.getInt("price"));
+				info.put("airDate",rs.getDate("airDate"));
+				info.put("remainTickets",rs.getInt("remainTickets"));
+				ticket.add(info);
+			}
+			String jsonObject=ticket.toJSONString();
+			//System.out.print(jsonObject);
+			tickets.put("tickets", ticket);
+			PrintWriter out=response.getWriter();
+			out.print(tickets);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			out.print("failed");
+			System.out.print("failed");
+		}finally {
+			//System.out.print(tickets);
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);

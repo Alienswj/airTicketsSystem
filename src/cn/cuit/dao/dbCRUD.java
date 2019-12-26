@@ -57,14 +57,14 @@ public class dbCRUD {
 	}
 	
 	public static boolean delete(String sql) {
-		boolean flag=false;
 		try {
 			stmt=conn.createStatement();
-			flag=stmt.execute(sql);
+			stmt.execute(sql);
+			return true;
 		} catch (SQLException e) {
 			System.out.println("delete failed");
 		}
-		return flag;
+		return false;
 	}
 	
 	public static void disconnection() {

@@ -17,6 +17,7 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mysql-connector-java-5.1.48.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/junit-jupiter-api-5.5.2.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/json-20190722.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/fastjson-1.2.62.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

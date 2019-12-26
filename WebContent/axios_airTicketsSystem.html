@@ -10,37 +10,120 @@
 
 <body>
     <form @submit.prevent="login" id='login'>
-        用户名：<input type="text" name="username" v-model='username'>{{username}}<br />
-        密&nbsp;&nbsp;&nbsp;码：<input type="text" name="password" v-model='password'>
+        用户名：<input type="text" name="username" v-model='username'><br />
+        密&nbsp;&nbsp;&nbsp;码：<input type="password" name="password" v-model='password'>
         <input type="submit" value="登录">
     </form>
     <div align="right">
         <a href="axios_signup.html">注册</a>
     </div>
 
-    <form action="queryTickets" method="post">
-        出发地：<input type="text" name="departure"><br />
-        目的地：<input type="text" name="destination"><br />
-        日期：<input type="date" name="airDate"><br />
-        <input type="submit" name="查询">
+    <form @submit.prevent="query" id="query">
+        出发地：<input type="text" name="departure" v-model="departure"><br />
+        目的地：<input type="text" name="destination" v-model="destination"><br />
+        日期：<input type="date" name="airDate" v-model="airDate"><br />
+        <input type="submit" value="查询">
+        <div>
+            <table border=1 align="center">
+                <tr>
+                    <th>航班号</th>
+                    <th>航空公司</th>
+                    <th>起飞地</th>
+                    <th>目的地</th>
+                    <th>起飞时间</th>
+                    <th>降落时间</th>
+                    <th>价格</th>
+                    <th>日期</th>
+                    <th>余票量</th>
+                    <th></th>
+                </tr>
+                <tr v-for="i in tickets">
+                    <td align="center">{{i.airId}}</td>
+                    <td align="center">{{i.airLine}}</td>
+                    <td align="center">{{i.departure}}</td>
+                    <td align="center">{{i.destination}}</td>
+                    <td align="center">{{i.depTime}}</td>
+                    <td align="center">{{i.landTime}}</td>
+                    <td align="center">{{i.price}}</td>
+                    <td align="center">{{i.airDate}}</td>
+                    <td align="center">{{i.remainTickets}}</td>
+                    <td align="center"><button @click="bookTicket(event)">订购</button></td>
+                </tr>
+            </table>
+        </div>
     </form>
 </body>
 <script type="text/javascript">
-    new Vue({
+    userId = null;
+
+    var queryVM = new Vue({
+        el: "#query",
+        data: {
+            departure: null,
+            destination: null,
+            airDate: null,
+            airId: null,
+            tickets: null
+        },
+        methods: {
+            bookTicket(event) {
+                this.airId = event.currentTarget.parentElement.parentElement.firstElementChild.innerHTML;
+                console.log(this.airId);
+                axios.post('bookTicket', {
+                    userId: userId,
+                    airId: this.airId,
+                    airDate: this.airDate
+                }).then(
+                    response => (this.bookStatus(response))
+                ).catch(
+                    error => (console.log(error))
+                )
+            },
+            bookStatus(response) {
+                if (userId == null) {
+                    alert("请先登录！");
+                } else {
+                    if (response.data == "success") {
+                        alert("订购成功！");
+                        this.query();//订购结束刷新余票量
+                    } else {
+                        alert("订购失败!");
+                    }
+                }
+            },
+            query() {
+                axios.post('queryTickets', {
+                    departure: this.departure,
+                    destination: this.destination,
+                    airDate: this.airDate
+                }).then(
+                    response => (this.callback(response))
+                ).catch(
+                    error => (console.log(error))
+                )
+            },
+            callback(response) {
+                console.log(response.data);
+                this.tickets = response.data.tickets;
+            }
+        }
+    })
+
+    var loginVM = new Vue({
         el: "#login",
         data: {
             username: null,
-            password: null
+            password: null,
+            identity: null
         },
         mounted() {
-            axios.post('axios_login', null)
+            axios.get('axios_login')
                 .then(
                     response => (this.callback(response))
                 )
                 .catch(
                     error => (console.log(error))
                 )
-
         },
         methods: {
             callback(response) {
@@ -48,7 +131,10 @@
                     if (response.data == "false") {
                         alert("用户名或密码错误！");
                     } else {
-                        document.getElementById("login").innerHTML = response.data + '<a href="/airTicketsSystem/logoff">注销</a>';
+                        userId = response.data.userId;
+                        this.identity = response.data.identity;
+                        //console.log(userId);
+                        document.getElementById("login").innerHTML = response.data.username + this.identity + '<a href="/airTicketsSystem/queryOrders.html">我的订单</a>' + '<a href="/airTicketsSystem/logoff">注销</a>';
                     }
                 }
             },
@@ -60,13 +146,11 @@
                     axios.post('axios_login', {
                         username: this.username,
                         password: this.password
-                    })
-                        .then(
-                            response => (this.callback(response))
-                        )
-                        .catch(
-                            error => (console.log(error))
-                        )
+                    }).then(
+                        response => (this.callback(response))
+                    ).catch(
+                        error => (console.log(error))
+                    )
                 }
             }
         }

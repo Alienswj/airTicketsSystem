@@ -37,9 +37,13 @@ public class systemTest {
 			System.out.println("get");
 			System.out.println(rs1.getDate("airDate").equals(Date.valueOf("2020-01-16")));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	void testUpdate() {
+		
 	}
 	
 }
