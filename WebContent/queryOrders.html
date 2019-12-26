@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>查询订单</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div id="orders">
+        <b>旅客信息：</b>
+        旅客姓名：{{travName}}
+        旅客手机号：{{phoneNum}}
+        <table border=1 align="center">
+            <tr>
+                <th>航班号</th>
+                <th>航空公司</th>
+                <th>起飞地</th>
+                <th>目的地</th>
+                <th>起飞时间</th>
+                <th>降落时间</th>
+                <th>价格</th>
+                <th>日期</th>
+                <th></th>
+            </tr>
+            <tr v-for="i in orders">
+                <td align="center">{{i.airId}}</td>
+                <td align="center">{{i.airLine}}</td>
+                <td align="center">{{i.departure}}</td>
+                <td align="center">{{i.destination}}</td>
+                <td align="center">{{i.depTime}}</td>
+                <td align="center">{{i.landTime}}</td>
+                <td align="center">{{i.price}}</td>
+                <td align="center">{{i.airDate}}</td>
+                <td align="center"><button @click="refund($event)">退票</button></td>
+            </tr>
+        </table>
+    </div>
+</body>
+<script type="text/javascript">
+    var vm = new Vue({
+        el: "#orders",
+        data: {
+            travName: null,
+            phoneNum: null,
+            airId: null,
+            airDate: null,
+            orders: null,
+        },
+        mounted() {
+            axios.get('queryOrders')
+                .then(
+                    response => (this.getOrders(response))
+                )
+                .catch(
+                    error => (console.log(error))
+                )
+        },
+        methods: {
+            getOrders(response) {
+                this.orders = response.data.orders;
+                this.travName = response.data.travName;
+                this.phoneNum = response.data.phoneNum;
+                console.log(response.data);
+            },
+            refund(event) {
+                this.airId = event.currentTarget.parentElement.parentElement.firstElementChild.innerHTML;
+                console.log(this.airId);
+                this.airDate = event.currentTarget.parentElement.previousElementSibling.innerHTML;
+                console.log(this.airDate);
+                axios.post('refundTickets', {
+                    airId: this.airId,
+                    airDate: this.airDate
+                }).then(
+                    response => (alert(response.data), location.reload())
+                ).catch(
+                    error => (console.log(error))
+                )
+            }
+        }
+    })
+</script>
+
+</html>
