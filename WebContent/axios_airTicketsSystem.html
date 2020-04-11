@@ -3,59 +3,135 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>机票预定系统</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>中国宝龙航空</title>
+    <script src="js/axios.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/jquery.min.js"> </script>
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Dancing Script:Semi-Bold">
 </head>
 
 <body>
-    <form @submit.prevent="login" id='login'>
-        用户名：<input type="text" name="username" v-model='username'><br />
-        密&nbsp;&nbsp;&nbsp;码：<input type="password" name="password" v-model='password'>
-        <input type="submit" value="登录">
-    </form>
-    <div align="right">
-        <a href="axios_signup.html">注册</a>
-    </div>
+    <nav class="navbar navbar-default" role="navigation" id='NavigationBar' style="background-color: rgba(0,0,0,.5);">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <img src="/airTicketsSystem/img/中国宝龙航空.png" style="width: 180px;height: 50px;margin-left: 10%;"
+                    alt="中国宝龙航空logo">
+            </div>
+            <div>
+                <ul class="nav navbar-nav" style="margin-left: 5%;">
+                    <li class="active"><a href="axios_airTicketsSystem.html">首页</a></li>
+                    <li><a href="#" style="color: bisque;">优惠促销</a></li>
+                    <li><a href="#" style="color: bisque;">龙航假期</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: bisque;">
+                            自助服务
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">乘机指南</a></li>
+                            <li><a href="#">自助值机</a></li>
+                            <li><a href="#">贵宾服务</a></li>
+                            <li><a href="#">旅行指南</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <ul class="nav navbar-nav navbar-right" id='login' style="margin-right: 5%;">
+                <li><a href="axios_signup.html" style="color: bisque;"><span class="glyphicon glyphicon-user"></span>
+                        注册</a></li>
+                <li><a href="#" @click="dialogFormVisible = true;" style="color: bisque;"><span
+                            class="glyphicon glyphicon-log-in"></span>
+                        登录</a></li>
+            </ul>
+            <el-dialog title="登录" :visible.sync="dialogFormVisible">
+                <el-form @submit.native.prevent>
+                    <el-form-item label="用户名" :label-width="formLabelWidth">
+                        <el-input v-model="username" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" :label-width="formLabelWidth">
+                        <el-input v-model="password" type="password" autocomplete="off"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="dialogFormVisible = false;login()">确 定</el-button>
+                </div>
+            </el-dialog>
+        </div>
+    </nav>
 
-    <form @submit.prevent="query" id="query">
-        出发地：<input type="text" name="departure" v-model="departure"><br />
-        目的地：<input type="text" name="destination" v-model="destination"><br />
-        日期：<input type="date" name="airDate" v-model="airDate"><br />
-        <input type="submit" value="查询">
-        <div>
-            <table border=1 align="center">
-                <tr>
-                    <th>航班号</th>
-                    <th>航空公司</th>
-                    <th>起飞地</th>
-                    <th>目的地</th>
-                    <th>起飞时间</th>
-                    <th>降落时间</th>
-                    <th>价格</th>
-                    <th>日期</th>
-                    <th>余票量</th>
-                    <th></th>
-                </tr>
-                <tr v-for="i in tickets">
-                    <td align="center">{{i.airId}}</td>
-                    <td align="center">{{i.airLine}}</td>
-                    <td align="center">{{i.departure}}</td>
-                    <td align="center">{{i.destination}}</td>
-                    <td align="center">{{i.depTime}}</td>
-                    <td align="center">{{i.landTime}}</td>
-                    <td align="center">{{i.price}}</td>
-                    <td align="center">{{i.airDate}}</td>
-                    <td align="center">{{i.remainTickets}}</td>
-                    <td align="center"><button @click="bookTicket(event)">订购</button></td>
-                </tr>
+    <div id='query' style="margin-bottom: 30%;">
+        <form @submit.prevent="query" style="margin-left: 5%;margin-right: 5%;margin-top: 5%;width: 10%;float: left;">
+            <div class="form-group">
+                <label>出发地</label>
+                <input type="text" class="form-control" name="departure" v-model="departure">
+            </div>
+            <div class="form-group">
+                <label>目的地</label>
+                <input type="text" class="form-control" name="destination" v-model="destination">
+            </div>
+            <div class="form-group">
+                <label>日期</label>
+                <input type="date" class="form-control" name="airDate" v-model="airDate">
+            </div>
+            <button type="submit" class="btn btn-primary" @click="tableStyle.visibility=visible">查询</button>
+        </form>
+        <div id='result'>
+            <table style="margin-left:10%; text-align:center;width: 60%; " class="table table-bordered table-striped">
+                <caption>查询结果</caption>
+                <thead v-if="tickets!=null">
+                    <tr>
+                        <th class="centerItem">航班号</th>
+                        <th class="centerItem">航空公司</th>
+                        <th class="centerItem">起飞地</th>
+                        <th class="centerItem">目的地</th>
+                        <th class="centerItem">起飞时间</th>
+                        <th class="centerItem">降落时间</th>
+                        <th class="centerItem">价格</th>
+                        <th class="centerItem">日期</th>
+                        <th class="centerItem">余票量</th>
+                        <th class="centerItem">#</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(i,index) in tickets" :key="i.airId">
+                        <td class="centerItem">{{i.airId}}</td>
+                        <td class="centerItem">{{i.airLine}}</td>
+                        <td class="centerItem">{{i.departure}}</td>
+                        <td class="centerItem">{{i.destination}}</td>
+                        <td class="centerItem">{{i.depTime}}</td>
+                        <td class="centerItem">{{i.landTime}}</td>
+                        <td class="centerItem">{{i.price}}</td>
+                        <td class="centerItem">{{i.airDate}}</td>
+                        <td class="centerItem">{{i.remainTickets}}</td>
+                        <td class="centerItem">
+                            <el-button type="primary" @click="bookTicket(i.airId) ">订购</el-button>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
-    </form>
+    </div>
+    <footer class="footer" style="background-color: rgba(0,0,0,.5);">
+        <HR style="height: 1px;color:#000000" />
+        <img src="img/中国宝龙航空.png" style="width: 360px;height: 100px;left: 10%; float: left;" alt="中国宝龙航空logo">
+        <ul style="float: left;">
+            <li>走进龙航</li>
+            <li>龙航资讯</li>
+            <li>龙航招聘</li>
+            <li>联系我们</li>
+            <li>常见问题</li>
+        </ul>
+        <strong class="navbar-header" id="ad" style="float: right;">Another Faery, Another Heaven</strong>
+    </footer>
 </body>
+<script src="js/vue.js"></script>
+<script src="js/index.js"></script>
 <script type="text/javascript">
     userId = null;
-
+    //查询
     var queryVM = new Vue({
         el: "#query",
         data: {
@@ -63,34 +139,44 @@
             destination: null,
             airDate: null,
             airId: null,
-            tickets: null
+            tickets: null,
+            tableStyle: {
+                visibility: 'hidden'
+            }
         },
         methods: {
-            bookTicket(event) {
-                this.airId = event.currentTarget.parentElement.parentElement.firstElementChild.innerHTML;
-                console.log(this.airId);
-                axios.post('bookTicket', {
-                    userId: userId,
-                    airId: this.airId,
-                    airDate: this.airDate
-                }).then(
-                    response => (this.bookStatus(response))
-                ).catch(
-                    error => (console.log(error))
-                )
+            //发送订票请求
+            bookTicket(airId) {
+                if (userId == null) {
+                    this.$message("请先登录！");
+                } else {
+                    console.log(airId)
+                    this.airId = airId;
+                    console.log(this.airId);
+                    axios.post('bookTicket', {
+                        userId: userId,
+                        airId: this.airId,
+                        airDate: this.airDate
+                    }).then(
+                        response => (this.bookStatus(response))
+                    ).catch(
+                        error => (console.log(error))
+                    )
+                }
             },
             bookStatus(response) {
                 if (userId == null) {
-                    alert("请先登录！");
+                    this.$message("请先登录！");
                 } else {
                     if (response.data == "success") {
-                        alert("订购成功！");
+                        this.$message("订购成功！");
                         this.query();//订购结束刷新余票量
                     } else {
-                        alert("订购失败!");
+                        this.$message("订购失败!");
                     }
                 }
             },
+            //发送查询机票请求
             query() {
                 axios.post('queryTickets', {
                     departure: this.departure,
@@ -102,21 +188,27 @@
                     error => (console.log(error))
                 )
             },
+            //接受响应的机票信息
             callback(response) {
                 console.log(response.data);
                 this.tickets = response.data.tickets;
             }
         }
     })
-
-    var loginVM = new Vue({
-        el: "#login",
-        data: {
-            username: null,
-            password: null,
-            identity: null
+    //登录
+    var NavigationBarVM = new Vue({
+        el: "#NavigationBar",
+        data() {
+            return {
+                username: null,
+                password: null,
+                identity: null,
+                dialogFormVisible: false,
+                formLabelWidth: '120px',
+            }
         },
         mounted() {
+            //每次刷新页面自动发送一条空请求，服务端检查session是否存在登录信息。
             axios.get('axios_login')
                 .then(
                     response => (this.callback(response))
@@ -126,6 +218,7 @@
                 )
         },
         methods: {
+            //根据响应进行操作
             callback(response) {
                 if (response.data != '') {
                     if (response.data == "false") {
@@ -134,10 +227,23 @@
                         userId = response.data.userId;
                         this.identity = response.data.identity;
                         //console.log(userId);
-                        document.getElementById("login").innerHTML = response.data.username + this.identity + '<a href="/airTicketsSystem/queryOrders.html">我的订单</a>' + '<a href="/airTicketsSystem/logoff">注销</a>';
+                        //document.getElementById("login").innerHTML = response.data.username + this.identity + '<a href="/airTicketsSystem/queryOrders.html"> 我的订单 </a>' + '<a href="/airTicketsSystem/ManagePage.html">后台管理 </a>' + '<a href="/airTicketsSystem/logoff">注销</a>';
+                        //document.getElementById('login').innerHTML = '<el-submenu index="3">' +
+                        //'<template slot="title">' + response.data.username + '</template>' + '<el-menu-item index="2-1"><a href="/airTicketsSystem/queryOrders.html">我的订单</a></el-menu-item>' + '<el-menu-item index="2-2"><a href="/airTicketsSystem/logoff">注销</a></el-menu-item>' + '</el-submenu>';
+                        document.getElementById('login').innerHTML = '<div class="dropdown">' +
+                            '<button type="button" class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" style="font-size:18px;">' + response.data.username + this.identity +
+                            '<span class="caret"></span></button>' +
+                            '<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
+                            '<li role="presentation">' +
+                            '<a role="menuitem" tabindex="-1" href="/airTicketsSystem/queryOrders.html" style="font-size:18px;">我的订单</a></li>' +
+                            '<li role="presentation">' +
+                            '<a role="menuitem" tabindex="-1" href="/airTicketsSystem/ManagePage.html" style="font-size:18px;">管理页面</a></li>' +
+                            '<li role="presentation">' +
+                            '<a role="menuitem" tabindex="-1" href="/airTicketsSystem/logoff" style="font-size:18px;">注销</a></li></ul></div>';
                     }
                 }
             },
+            //检验输入合法性并发送登录请求
             login() {
                 console.log(this.username);
                 if (!this.username || !this.password) {
@@ -156,5 +262,21 @@
         }
     })
 </script>
+<style>
+    .centerItem {
+        text-align: center;
+    }
+
+    ul {
+        list-style-type: none;
+    }
+
+    #ad {
+        font-family: 'Dancing Script', 'handwriting';
+        font-size: 48px;
+        text-align: center;
+        float: right;
+    }
+</style>
 
 </html>

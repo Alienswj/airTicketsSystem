@@ -8,6 +8,20 @@
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	<filter>
+		<filter-name>isLoginFilter</filter-name>
+		<filter-class>cn.cuit.filter.isLoginFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>isLoginFilter</filter-name>
+		<url-pattern>/bookTicket</url-pattern>
+		<url-pattern>/refundTickets</url-pattern>
+		<url-pattern>/queryOrders</url-pattern>
+		<url-pattern>/deleteUserInfo</url-pattern>
+		<url-pattern>/updateAirline</url-pattern>
+		<url-pattern>/createAirline</url-pattern>
+		<url-pattern>/deleteAirline</url-pattern>
+	</filter-mapping>
 	
 	<servlet>
 		<servlet-name>axios_login</servlet-name>
@@ -64,5 +78,37 @@
 	<servlet-mapping>
 		<servlet-name>queryOrdersServlet</servlet-name>
 		<url-pattern>/queryOrders</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>createAirline</servlet-name>
+		<servlet-class>cn.cuit.service.createAirline</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>createAirline</servlet-name>
+		<url-pattern>/createAirline</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>deleteAirline</servlet-name>
+		<servlet-class>cn.cuit.service.deleteAirline</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>deleteAirline</servlet-name>
+		<url-pattern>/deleteAirline</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>updateAirline</servlet-name>
+		<servlet-class>cn.cuit.service.updateAirline</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>updateAirline</servlet-name>
+		<url-pattern>/updateAirline</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>deleteUserInfo</servlet-name>
+		<servlet-class>cn.cuit.service.deleteUserInfo</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>deleteUserInfo</servlet-name>
+		<url-pattern>/deleteUserInfo</url-pattern>
 	</servlet-mapping>
 </web-app>

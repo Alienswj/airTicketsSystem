@@ -4,38 +4,78 @@
 <head>
     <meta charset="UTF-8">
     <title>查询订单</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.min.js"></script>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="js/index.js"></script>
 </head>
 
 <body>
+    <nav class="navbar navbar-default" role="navigation" id='NavigationBar' style="background-color: rgba(0,0,0,.5);">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <img src="/airTicketsSystem/img/中国宝龙航空.png" style="width: 180px;height: 50px;margin-left: 10%;"
+                    alt="中国宝龙航空logo">
+            </div>
+            <div>
+                <ul class="nav navbar-nav" style="margin-left: 5%;">
+                    <li><a href="axios_airTicketsSystem.html" style="color: bisque;">首页</a></li>
+                    <li><a href="#" style="color: bisque;">优惠促销</a></li>
+                    <li><a href="#" style="color: bisque;">龙航假期</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: bisque;">
+                            自助服务
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">乘机指南</a></li>
+                            <li><a href="#">自助值机</a></li>
+                            <li><a href="#">贵宾服务</a></li>
+                            <li><a href="#">旅行指南</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div id="orders">
-        <b>旅客信息：</b>
+        <b style="margin-left: 150px;font-size: 20px;">旅客信息：</b>
+        <el-divider direction="vertical"></el-divider>
         旅客姓名：{{travName}}
+        <el-divider direction="vertical"></el-divider>
         旅客手机号：{{phoneNum}}
-        <table border=1 align="center">
-            <tr>
-                <th>航班号</th>
-                <th>航空公司</th>
-                <th>起飞地</th>
-                <th>目的地</th>
-                <th>起飞时间</th>
-                <th>降落时间</th>
-                <th>价格</th>
-                <th>日期</th>
-                <th></th>
-            </tr>
-            <tr v-for="i in orders">
-                <td align="center">{{i.airId}}</td>
-                <td align="center">{{i.airLine}}</td>
-                <td align="center">{{i.departure}}</td>
-                <td align="center">{{i.destination}}</td>
-                <td align="center">{{i.depTime}}</td>
-                <td align="center">{{i.landTime}}</td>
-                <td align="center">{{i.price}}</td>
-                <td align="center">{{i.airDate}}</td>
-                <td align="center"><button @click="refund($event)">退票</button></td>
-            </tr>
+        <table style="position:absolute;top:300px;left:0;right:0;bottom:0;margin:auto; text-align:center;width: 60%;"
+            class="table table-bordered table-striped">
+            <caption>查询结果</caption>
+            <thead>
+                <tr>
+                    <th class="centerItem">航班号</th>
+                    <th class="centerItem">航空公司</th>
+                    <th class="centerItem">起飞地</th>
+                    <th class="centerItem">目的地</th>
+                    <th class="centerItem">起飞时间</th>
+                    <th class="centerItem">降落时间</th>
+                    <th class="centerItem">价格</th>
+                    <th class="centerItem">日期</th>
+                    <th class="centerItem">#</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(i,index) in orders" :key="index">
+                    <td class="centerItem">{{i.airId}}</td>
+                    <td class="centerItem">{{i.airLine}}</td>
+                    <td class="centerItem">{{i.departure}}</td>
+                    <td class="centerItem">{{i.destination}}</td>
+                    <td class="centerItem">{{i.depTime}}</td>
+                    <td class="centerItem">{{i.landTime}}</td>
+                    <td class="centerItem">{{i.price}}</td>
+                    <td class="centerItem">{{i.airDate}}</td>
+                    <td class="centerItem">
+                        <el-button type="info" @click="refund(i.airId,i.airDate)">退票</el-button>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </body>
@@ -65,10 +105,10 @@
                 this.phoneNum = response.data.phoneNum;
                 console.log(response.data);
             },
-            refund(event) {
-                this.airId = event.currentTarget.parentElement.parentElement.firstElementChild.innerHTML;
+            refund(airId, airDate) {
+                this.airId = airId;
                 console.log(this.airId);
-                this.airDate = event.currentTarget.parentElement.previousElementSibling.innerHTML;
+                this.airDate = airDate;
                 console.log(this.airDate);
                 axios.post('refundTickets', {
                     airId: this.airId,
@@ -82,5 +122,10 @@
         }
     })
 </script>
+<style>
+    .centerItem {
+        text-align: center;
+    }
+</style>
 
 </html>

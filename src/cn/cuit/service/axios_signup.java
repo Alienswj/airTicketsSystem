@@ -11,9 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 
 import cn.cuit.dao.dbCRUD;
+import cn.cuit.utils.toJsonUtils;
 
 
 public class axios_signup extends HttpServlet {
@@ -25,17 +26,13 @@ public class axios_signup extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BufferedReader br = request.getReader();
-
-	    String str, wholeStr = "";
-	    while((str = br.readLine()) != null){
-	        wholeStr += str;
-		}
-		//System.out.println(wholeStr);
-	    JSONObject json=new JSONObject(wholeStr);
+	    JSONObject json=toJsonUtils.toJSON(request);
 	    //System.out.print(json.getString("username"));
 	    String username=json.getString("username");
 	    String password=json.getString("password");
+	    String travName=json.getString("travName");
+	    String idNum=json.getString("idNum");
+	    String phoneNum=json.getString("phoneNum");
 	    PrintWriter out=response.getWriter();
 	    dbCRUD.connDb();
 		String sql="select count(*) from userinfo";
@@ -45,9 +42,9 @@ public class axios_signup extends HttpServlet {
 			long count=rs.getLong("count(*)");
 			String userId=String.valueOf(count+1);
 			//System.out.println(count);
-			sql="insert into userinfo(username,password,userId,accessRight) values('"+username+"','"+password+"','"+userId+"',0);";
-			System.out.println(sql);
-			if(dbCRUD.create(sql))
+			sql="insert into userinfo(username,password,userId,accessRight) values('"+username+"','"+password+"','"+userId+"',0)";
+			String sql2="insert into travinfo(userId,travName,idNum,phoneNum) values('"+userId+"','"+travName+"','"+idNum+"','"+phoneNum+"')";
+			if(dbCRUD.create(sql)&&dbCRUD.create(sql2))
 				out.print("success");
 			else
 				out.print("failed");

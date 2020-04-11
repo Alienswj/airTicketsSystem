@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理系统</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+
+<body>
+    <form id='createAirline' @submit.prevent="createAirline()">
+        <p>增加航线：</p>
+        航班号：<input type="text" name="airId" v-model="airId"><br />
+        航司：<input type="text" name="airLine" v-model="airLine"><br />
+        起飞地：<input type="text" name="departure" v-model="departure"><br />
+        目的地：<input type="text" name="destination" v-model="destination"><br />
+        起飞时刻：<input type="text" name="depTime" v-model="depTime"><br />
+        降落时刻：<input type="text" name="landTime" v-model="landTime"><br />
+        价格：<input type="text" name="price" v-model="price"><br />
+        <input type="submit" value="提交">
+    </form>
+    <form id='deleteAirline' @submit.prevent="deleteAirline()">
+        <p>删除航线：</p>
+        航班号：<input type="text" name="airId" v-model="airId"><br />
+        <input type="submit" value="提交">
+    </form>
+    <form id='updateAirline' @submit.prevent="updateAirline()">
+        <p>更新航线信息：(未完成)</p>
+        航班号：<input type="text" name="airId" v-model="airId"><br />
+        价格：<input type="text" name="price" v-model="price"><br />
+        起飞日期：<input type="date" name="airDate" v-model="airDate"><br />
+        余票量：<input type="text" name="remainTickets" v-model="remainTickets"><br />
+        <input type="submit" value="提交">
+    </form>
+    <form id='deleteUserInfo' @submit.prevent="deleteUserInfo()">
+        <p>删除账号信息：</p>
+        用户ID：<input type="text" name="userId" v-model='userId'><br />
+        <input type="submit" value="提交"><br />
+    </form>
+</body>
+<script type="text/javascript">
+    var createVM = new Vue({
+        el: "#createAirline",
+        data: {
+            airId: null,
+            airLine: null,
+            departure: null,
+            destination: null,
+            depTime: null,
+            landTime: null,
+            price: null
+        },
+        methods: {
+            createAirline() {
+                axios.post('createAirline', {
+                    airId: this.airId,
+                    airLine: this.airLine,
+                    departure: this.departure,
+                    destination: this.destination,
+                    depTime: this.depTime,
+                    landTime: this.landTime,
+                    price: this.price
+                }).then(
+                    response => (this.callback(response))
+                ).catch(
+                    error => (console.log(error))
+                )
+            },
+            callback(response) {
+                if (response.data == "notLogin") {
+                    alert("您还未登录！")
+                } else if (response.data == "success") {
+                    alert("添加成功！")
+                } else if (response.data == "failed") {
+                    alert("添加失败！")
+                }
+            }
+        }
+    })
+    new Vue({
+        el: "#deleteAirline",
+        data: {
+            airId: null,
+        },
+        methods: {
+            deleteAirline() {
+                axios.post('deleteAirline', {
+                    airId: this.airId,
+                }).then(
+                    response => (this.callback(respones))
+                ).catch(
+                    error => (console.log(error))
+                )
+            },
+            callback(respones) {
+                if (respones.data == "notLogin") {
+                    alert("您还未登录！")
+                } else if (respones.data == "success") {
+                    alert("操作成功！")
+                } else if (respones.data == "failed") {
+                    alert("操作失败！")
+                }
+            }
+        }
+    })
+    new Vue({
+        el: "#updateAirline",
+        data: {
+            airId: null,
+            price: null,
+            airDate: null,
+            remainTickets: null
+        },
+        methods: {
+            updateAirline() {
+                axios.post('updateAirline', {
+                    airId: this.airId,
+                    price: this.price,
+                    airDate: this.airDate,
+                    remainTickets: this.remainTickets
+                }).then(
+                    response => (this.callback(respones))
+                ).catch(
+                    error => (console.log(error))
+                )
+            },
+            callback(respones) {
+                if (respones.data == "notLogin") {
+                    alert("您还未登录！")
+                } else if (respones.data == "success") {
+                    alert("操作成功！")
+                } else if (respones.data == "failed") {
+                    alert("操作失败！")
+                }
+            }
+        }
+    })
+    new Vue({
+        el: "#deleteUserInfo",
+        data: {
+            userId: null,
+        },
+        methods: {
+            deleteUserInfo() {
+                axios.post('', {
+                    userId: this.userId,
+
+                }).then(
+                    response => (this.callback(respones))
+                ).catch(
+                    error => (console.log(error))
+                )
+            },
+            callback(respones) {
+                if (respones.data == "notLogin") {
+                    alert("您还未登录！")
+                } else if (respones.data == "success") {
+                    alert("操作成功！")
+                } else if (respones.data == "failed") {
+                    alert("操作失败！")
+                }
+            }
+        }
+    })
+</script>
+
+</html>

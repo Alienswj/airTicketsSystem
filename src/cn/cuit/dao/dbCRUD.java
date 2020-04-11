@@ -23,48 +23,51 @@ public class dbCRUD {
 	}
 	public static boolean create(String sql) {
 		try {
+			System.out.println("dbCRUD:create:"+sql);
 			stmt=conn.createStatement();
 			stmt.execute(sql);
 			return true;
 		} catch (SQLException e) {
 			System.out.println("create failed");
+			return false;
 		}
-		return false;
 	}
 	
 	public static ResultSet retrieve(String sql) {
 		try {
+			System.out.println("dbCRUD:retrieve:"+sql);
 			stmt=conn.createStatement();
 			rs=stmt.executeQuery(sql);
-			System.out.println(sql);
 			return rs;
 		} catch (SQLException e) {
 			System.out.println("retrieve failed");
+			return null;
 		}
-		return null;
 	}
 	
 	public static int update(String sql) {
 		int i;
 		try {
+			System.out.println("dbCRUD:update:"+sql);
 			stmt=conn.createStatement();
 			i=stmt.executeUpdate(sql);
 			return i;
 		} catch (SQLException e) {
 			System.out.println("update failed");
+			return 0;
 		}
-		return 0;
 	}
 	
 	public static boolean delete(String sql) {
 		try {
+			System.out.println("dbCRUD:delete:"+sql);
 			stmt=conn.createStatement();
 			stmt.execute(sql);
 			return true;
 		} catch (SQLException e) {
 			System.out.println("delete failed");
+			return false;
 		}
-		return false;
 	}
 	
 	public static void disconnection() {

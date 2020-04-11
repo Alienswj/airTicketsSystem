@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.cuit.dao.dbCRUD;
+import cn.cuit.utils.toJsonUtils;
 
 public class axios_login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -50,13 +51,7 @@ public class axios_login extends HttpServlet {
 			}
 		} else {
 			if(request.getContentLength()!=0) {
-				BufferedReader br = request.getReader();
-			    String str, wholeStr = "";
-			    while((str = br.readLine()) != null){
-			        wholeStr += str;
-				}
-				System.out.println(wholeStr);
-			    JSONObject json=JSON.parseObject(wholeStr);
+			    JSONObject json=toJsonUtils.toJSON(request);
 			    username=json.getString("username");
 			    password=json.getString("password");
 				String sql="select username,password,userId,accessRight from userinfo where username='"+username+"' and password='"+password+"'";

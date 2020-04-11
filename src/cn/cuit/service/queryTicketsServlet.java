@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.alibaba.fastjson.*;
 
 import cn.cuit.dao.dbCRUD;
+import cn.cuit.utils.toJsonUtils;
 
 public class queryTicketsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -34,15 +35,7 @@ public class queryTicketsServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BufferedReader br = request.getReader();
-
-	    String str, wholeStr = "";
-	    while((str = br.readLine()) != null){
-	        wholeStr += str;
-		}
-		//System.out.println(wholeStr);
-	    JSONObject json=JSON.parseObject(wholeStr);
-	    
+		JSONObject json=toJsonUtils.toJSON(request);
 		String departure=json.getString("departure");
 		String destination=json.getString("destination");
 		String airDate=json.getString("airDate");
